@@ -5,6 +5,7 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all
+    Counter.first.increment!(:view)
   end
 
   # GET /products/1
@@ -26,15 +27,11 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(product_params)
 
-    respond_to do |format|
       if @product.save
-        format.html { redirect_to @product, notice: 'Product was successfully created.' }
-        format.json { render :show, status: :created, location: @product }
+        redirect_to products_url
       else
-        format.html { render :new }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+        render :new
       end
-    end
   end
 
   # PATCH/PUT /products/1
@@ -42,8 +39,7 @@ class ProductsController < ApplicationController
   def update
     respond_to do |format|
       if @product.update(product_params)
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
-        format.json { render :show, status: :ok, location: @product }
+        redirect_to products_url
       else
         format.html { render :edit }
         format.json { render json: @product.errors, status: :unprocessable_entity }
@@ -56,7 +52,7 @@ class ProductsController < ApplicationController
   def destroy
     @product.destroy
     respond_to do |format|
-      format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
+      format.html { redirect_to products_url, notice: 'Snap was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
